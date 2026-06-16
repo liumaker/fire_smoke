@@ -13,8 +13,9 @@ import random
 import xml.etree.ElementTree as ET
 
 # ============ 配置 ============
-VOC_ROOT = r"c:\Users\elitedatai\Desktop\work\fire_smoke\1w张预处理后融合数据集\VOC2007"
-YOLO_ROOT = r"c:\Users\elitedatai\Desktop\work\fire_smoke\yolo_dataset"
+BASE_DIR = os.path.dirname(__file__)
+VOC_ROOT = os.path.join(BASE_DIR, "1w张预处理后融合数据集", "VOC2007")
+YOLO_ROOT = os.path.join(BASE_DIR, "yolo_dataset")
 
 CLASSES = ["fire", "smoke"]  # fire=0, smoke=1
 
@@ -210,9 +211,15 @@ def main():
     print(f"  类别: {', '.join(f'{i}: {c}' for i, c in enumerate(CLASSES))}")
     print(f"{'=' * 60}")
 
-    # 输出 YOLO 训练配置
-    print(f"\n数据集配置文件 data.yaml 内容:")
-    print(f"  {YOLO_ROOT}\\data.yaml")
+    # 生成 data.yaml 配置文件
+    data_yaml_path = os.path.join(YOLO_ROOT, "data.yaml")
+    with open(data_yaml_path, "w") as f:
+        f.write(f"train: {os.path.join(YOLO_ROOT, 'images', 'train').replace(os.sep, '/')}\n")
+        f.write(f"val: {os.path.join(YOLO_ROOT, 'images', 'val').replace(os.sep, '/')}\n")
+        f.write(f"test: {os.path.join(YOLO_ROOT, 'images', 'test').replace(os.sep, '/')}\n")
+        f.write(f"nc: {len(CLASSES)}\n")
+        f.write(f"names: {CLASSES}\n")
+    print(f"\n数据集配置文件已生成: {data_yaml_path}")
     print(f"\n{'=' * 60}")
     print("train: " + os.path.join(YOLO_ROOT, "images", "train").replace("\\", "/"))
     print("val: " + os.path.join(YOLO_ROOT, "images", "val").replace("\\", "/"))
