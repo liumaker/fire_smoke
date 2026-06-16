@@ -1,0 +1,12 @@
+runs/
+output/
+results/
+datasets/
+dataset/
+*.pt
+*.pth
+*.onnx
+*.engine
+__pycache__/
+*.pyc
+.DS_Store
