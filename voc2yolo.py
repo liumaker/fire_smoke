@@ -47,6 +47,10 @@ def parse_voc_annotation(xml_path):
     width = int(size.find("width").text)
     height = int(size.find("height").text)
 
+    if width <= 0 or height <= 0:
+        print(f"  [警告] {xml_path} 中图片尺寸无效 (width={width}, height={height}), 跳过")
+        return None, None, None, None
+
     bboxes = []
     for obj in root.findall("object"):
         name = obj.find("name").text
@@ -101,7 +105,7 @@ def main():
             print(f"  [错误] 解析 {xml_file} 失败: {e}")
             continue
 
-        if not bboxes:
+        if filename is None or not bboxes:
             no_object_count += 1
             continue
 
@@ -135,7 +139,7 @@ def main():
             "bboxes": bboxes,
         })
 
-    print(f"         其中 {no_object_count} 个没有目标, {no_image_count} 个缺少图片")
+    print(f"         其中 {no_object_count} 个无效样本（无目标或尺寸异常）, {no_image_count} 个缺少图片")
     print(f"         有效样本: {len(valid_samples)} 个")
 
     if not valid_samples:
