@@ -26,17 +26,13 @@ names: ["fire", "smoke"]
 
 def main():
     parser = argparse.ArgumentParser(description="YOLO 烟火检测验证")
-    parser.add_argument("--model", type=str, default="runs/train/fire_smoke/weights/best.pt",
+    parser.add_argument("--model", type=str, default="runs/train/exp/weights/best.pt",
                         help="模型权重路径")
-    parser.add_argument("--data", type=str, default=None,
-                        help="data.yaml 路径（默认自动生成）")
     parser.add_argument("--imgsz", type=int, default=640, help="输入图片尺寸")
     parser.add_argument("--batch", type=int, default=16, help="批大小")
     parser.add_argument("--device", type=str, default="0", help="设备 (0,1,2,3 或 cpu)")
     parser.add_argument("--conf", type=float, default=0.001, help="置信度阈值")
     parser.add_argument("--iou", type=float, default=0.6, help="NMS IoU 阈值")
-    parser.add_argument("--project", type=str, default="runs/val", help="结果保存目录")
-    parser.add_argument("--name", type=str, default="exp", help="结果子目录名")
     parser.add_argument("--split", type=str, default="test", choices=["train", "val", "test"],
                         help="验证集划分")
     args = parser.parse_args()
@@ -46,8 +42,8 @@ def main():
         print(f"[错误] 模型文件不存在: {args.model}")
         sys.exit(1)
 
-    # 数据配置
-    data_yaml = args.data if args.data else prepare_data_yaml()
+    # 自动生成 data.yaml
+    data_yaml = prepare_data_yaml()
 
     print("=" * 60)
     print("YOLO 烟火检测验证")
@@ -63,7 +59,7 @@ def main():
     # 加载模型
     model = YOLO(args.model)
 
-    # 执行验证
+    # 执行验证（使用 YOLO 默认保存路径: runs/val/exp）
     results = model.val(
         data=data_yaml,
         imgsz=args.imgsz,
@@ -71,8 +67,6 @@ def main():
         device=args.device,
         conf=args.conf,
         iou=args.iou,
-        project=args.project,
-        name=args.name,
         split=args.split,
     )
 
@@ -96,8 +90,7 @@ def main():
             ap50_95 = results.ap[i].mean() if len(results.ap) > i else 0
             print(f"    {cls_name}: AP@50={ap50:.4f}, AP@50:95={ap50_95:.4f}")
 
-    save_dir = f"{args.project}/{args.name}"
-    print(f"\n  结果保存至: {save_dir}")
+    print(f"\n结果保存至: runs/val/exp*")
     print("=" * 60)
 
 

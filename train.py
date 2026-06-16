@@ -53,7 +53,7 @@ def main():
     # 加载模型
     model = YOLO(MODEL)
 
-    # 开始训练
+    # 开始训练（使用 YOLO 默认保存路径: runs/train/exp）
     results = model.train(
         data=data_yaml,
         epochs=EPOCHS,
@@ -61,8 +61,6 @@ def main():
         imgsz=IMGSZ,
         device=DEVICE,
         workers=WORKERS,
-        project=PROJECT,
-        name=NAME,
         resume=RESUME,
         amp=True,                     # 混合精度训练
         cache=False,                  # 是否缓存图片到内存
@@ -70,7 +68,7 @@ def main():
         seed=42,
     )
 
-    print(f"\n训练完成! 模型保存至: {os.path.join(PROJECT, NAME)}")
+    print(f"\n训练完成! 模型保存至: runs/train/exp*/weights/best.pt")
 
 
 if __name__ == "__main__":

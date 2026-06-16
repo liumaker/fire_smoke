@@ -5,24 +5,20 @@ YOLO 推理脚本 - 对单张图片、视频或目录批量推理
 import os
 import sys
 import argparse
-from pathlib import Path
 from ultralytics import YOLO
 
 
 def main():
     parser = argparse.ArgumentParser(description="YOLO 烟火检测推理")
     parser.add_argument("source", type=str, help="输入源: 图片/视频路径 或 目录")
-    parser.add_argument("--model", type=str, default="runs/train/fire_smoke/weights/best.pt",
+    parser.add_argument("--model", type=str, default="runs/train/exp/weights/best.pt",
                         help="模型权重路径")
     parser.add_argument("--conf", type=float, default=0.25, help="置信度阈值")
     parser.add_argument("--iou", type=float, default=0.45, help="NMS IoU 阈值")
     parser.add_argument("--imgsz", type=int, default=640, help="输入图片尺寸")
     parser.add_argument("--device", type=str, default="0", help="设备 (0,1,2,3 或 cpu)")
-    parser.add_argument("--save", action="store_true", default=True, help="保存结果")
     parser.add_argument("--show", action="store_true", help="显示结果")
     parser.add_argument("--save-txt", action="store_true", help="保存标签文件 (.txt)")
-    parser.add_argument("--project", type=str, default="runs/detect", help="结果保存目录")
-    parser.add_argument("--name", type=str, default="exp", help="结果子目录名")
     args = parser.parse_args()
 
     # 检查模型
@@ -42,26 +38,20 @@ def main():
     # 加载模型
     model = YOLO(args.model)
 
-    # 执行推理
+    # 执行推理（使用 YOLO 默认保存路径: runs/detect/exp）
     results = model.predict(
         source=args.source,
         conf=args.conf,
         iou=args.iou,
         imgsz=args.imgsz,
         device=args.device,
-        save=args.save,
+        save=True,
         show=args.show,
         save_txt=args.save_txt,
-        project=args.project,
-        name=args.name,
     )
 
-    # 统计
-    total = len(results)
-    save_dir = Path(args.project) / args.name
-    print(f"\n推理完成! 共处理 {total} 张图片")
-    if args.save:
-        print(f"结果保存至: {save_dir}")
+    print(f"\n推理完成! 共处理 {len(results)} 张图片")
+    print(f"结果保存至: runs/detect/exp*")
 
 
 if __name__ == "__main__":
