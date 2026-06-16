@@ -14,7 +14,7 @@ import xml.etree.ElementTree as ET
 
 # ============ 配置 ============
 BASE_DIR = os.path.dirname(__file__)
-VOC_ROOT = os.path.join(BASE_DIR, "1w张预处理后融合数据集", "VOC2007")
+VOC_ROOT = os.path.join(BASE_DIR,  "VOC2007")
 YOLO_ROOT = os.path.join(BASE_DIR, "yolo_dataset")
 
 CLASSES = ["fire", "smoke"]  # fire=0, smoke=1

@@ -1,6 +1,7 @@
 runs/
 output/
 results/
+VOC2007/
 datasets/
 dataset/
 yolo_dataset/
