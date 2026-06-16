@@ -3,6 +3,9 @@ output/
 results/
 datasets/
 dataset/
+yolo_dataset/
+1w张预处理后融合数据集.zip
+1w张预处理后融合数据集/
 *.pt
 *.pth
 *.onnx
