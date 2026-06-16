@@ -13,8 +13,6 @@ BATCH = 16
 IMGSZ = 640
 DEVICE = 0                     # GPU 设备号, CPU 设为 'cpu'
 WORKERS = 8
-PROJECT = "runs/train"
-NAME = "fire_smoke"
 RESUME = False                 # 是否从断点恢复
 # ==============================
 
